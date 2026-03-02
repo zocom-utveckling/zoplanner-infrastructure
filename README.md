@@ -8,7 +8,13 @@ Infrastructure and deployment guides for the ZoPlanner system.
 
 ```powershell
 cd ~/Desktop
-mkdir ZoPlanner
+
+if (-not (Test-Path "ZoPlanner" -PathType Container)) {
+    mkdir ZoPlanner | Out-Null
+}
+
+Write-Host ("ZoPlanner-mapp klar: {0:HH:mm yyyy-MM-dd}" -f (Get-Date))
+
 cd ZoPlanner
 
 git clone https://github.com/zocom-utveckling/zoplanner-api.git
