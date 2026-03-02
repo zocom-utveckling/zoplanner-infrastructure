@@ -2,7 +2,25 @@
 
 Script för att synka alla ZoPlanner-repos och starta om Docker-stacken efter att någon har pushat ändringar.
 
-## Scriptet
+## Ladda ner alla repo första gången
+
+```bash
+# Skapa en mapp för projektet
+mkdir ZoPlanner
+cd ZoPlanner
+
+# Klona alla fyra repositories
+# När man kör det här kommandot öppnas ett fönster där man behöver logga in på GitHub. Följ instruktionerna. 
+# Man måste logga in med ett konto som har åtkomst till alla repo som man klonar.
+
+git clone https://github.com/zocom-utveckling/zoplanner-api.git
+git clone https://github.com/zocom-utveckling/zoplanner-service.git
+git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
+git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
+
+```
+
+## Scriptet 
 
 ```bash
 #!/bin/bash
