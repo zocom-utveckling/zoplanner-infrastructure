@@ -2,6 +2,28 @@
 
 Script för att synka alla ZoPlanner-repos och starta om Docker-stacken efter att någon har pushat ändringar.
 
+## Scriptet
+
+```bash
+#!/bin/bash
+set -e
+
+# Pull all repos
+for dir in zoplanner-api zoplanner-service zoplanner-frontend zoplanner-notificationservice; do
+  if [ -d "$dir" ]; then
+    echo "Pulling $dir..."
+    (cd "$dir" && git pull)
+  fi
+done
+
+# Restart stack
+cd zoplanner-api/webapi
+docker-compose down
+docker-compose up -d --build
+
+echo "Done. Frontend: http://localhost:3000 | .NET: http://localhost:5027 | Java: http://localhost:8080"
+```
+
 ## Vad gör scriptet?
 
 1. **Pullar alla 4 repos** – zoplanner-api, zoplanner-service, zoplanner-frontend, zoplanner-notificationservice
