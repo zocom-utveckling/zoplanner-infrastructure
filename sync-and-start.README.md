@@ -15,6 +15,10 @@ git clone https://github.com/zocom-utveckling/zoplanner-service.git
 git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
 git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
 
+cd ./zoplanner-api/webapi/
+notepad .env
+# Kopiera in info till .env
+
 ```
 
 ## Scriptet 
@@ -30,6 +34,8 @@ for dir in zoplanner-api zoplanner-service zoplanner-frontend zoplanner-notifica
     (cd "$dir" && git pull)
   fi
 done
+
+
 
 # Restart stack (use -p zoplanner so same volumes are always used, data persists)
 cd zoplanner-api/webapi
