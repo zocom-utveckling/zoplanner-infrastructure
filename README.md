@@ -3,8 +3,6 @@
 
 ## Script för git clone 
 
-1. Klona alla repo till en mapp (t.ex. Desktop/ZoPlanner):
-
 ```powershell
 # Skapa en mapp för projektet på skrivbordet
 
@@ -25,8 +23,7 @@ Write-Host "Repos cloned." -ForegroundColor Green
 #
 
 ```
-
-2. Script för att git pull och starta om docker.
+## Script för att git pull och starta om docker
 
 ```powershell
 $folders = @(
