@@ -14,6 +14,7 @@ git clone https://github.com/zocom-utveckling/zoplanner-api.git
 git clone https://github.com/zocom-utveckling/zoplanner-service.git
 git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
 git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
+git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
 
 cd ./zoplanner-api/webapi/
 notepad .env
@@ -45,6 +46,38 @@ echo "Frontend: http://localhost:3000"
 echo "Swagger - .NET: http://localhost:5027/swagger/index.html"
 echo "Swagger - Java API: http://localhost:8080/swagger-ui/index.html"
 echo "Swagger - Notification: http://localhost:8082/swagger-ui/index.html"
+```
+
+### Windows (PowerShell)
+
+```powershell
+# Stop script on first error (like set -e)
+$ErrorActionPreference = "Stop"
+
+# List of repositories
+$repos = @(
+    "zoplanner-api",
+    "zoplanner-service",
+    "zoplanner-frontend",
+    "zoplanner-notificationservice"
+)
+
+# Pull all repos
+foreach ($dir in $repos) {
+    if (Test-Path $dir -PathType Container) {
+        Write-Host "Pulling $dir..."
+        
+        Push-Location $dir
+        git pull
+        Pop-Location
+    }
+}
+
+# Restart stack (use -p zoplanner so same volumes are always used, data persists)
+Set-Location "zoplanner-api\webapi"
+
+docker-compose -p zoplanner down
+docker-compose -p zoplanner up -d --build
 ```
 
 ## Vad gör scriptet?
