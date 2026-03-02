@@ -1,5 +1,6 @@
 # zoplanner-infrastructure
 
+Script för att ladda ner hela repot
 
 ## Script för git clone 
 
