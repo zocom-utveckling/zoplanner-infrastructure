@@ -66,6 +66,65 @@ Write-Host "Command Completed Successfully" -ForegroundColor Green
 #
 
 ```
+##Bonus Script
+
+```powershell
+
+# Stop on first error
+$ErrorActionPreference = "Stop"
+
+# Always determine base folder correctly
+if ((Split-Path -Leaf (Get-Location)) -eq "webapi") {
+    # We are inside zoplanner-api\webapi
+    Set-Location "..\.."
+}
+
+# We are now guaranteed to be in base folder
+
+$basePath = (Get-Location).Path
+
+$folders = @(
+  "zoplanner-api",
+  "zoplanner-service",
+  "zoplanner-frontend",
+  "zoplanner-notificationservice",
+  "zoplanner-infrastructure"
+)
+
+# Pull all repos
+foreach ($folder in $folders) {
+    if (Test-Path $folder) {
+        Write-Host "Pulling $folder ..." -ForegroundColor Cyan
+        Push-Location $folder
+        git pull
+        Pop-Location
+    }
+    else {
+        Write-Host "$folder not found!" -ForegroundColor Red
+    }
+}
+
+# Go to webapi
+Set-Location ".\zoplanner-api\webapi"
+
+docker compose -p zoplanner down --remove-orphans
+docker compose -p zoplanner up -d --build
+
+# Return to base
+Set-Location $basePath
+
+Write-Output @"
+Done.
+Frontend: http://localhost:3000
+Swagger - .NET: http://localhost:5027/swagger/index.html
+Swagger - Java API: http://localhost:8080/swagger-ui/index.html
+Swagger - Notification: http://localhost:8082/swagger-ui/index.html
+"@
+
+Write-Host "Command Completed Successfully" -ForegroundColor Green
+
+#
+```
 
 > Körs från parent-mappen där alla repo ligger (`zoplanner-api`, `zoplanner-service`, osv).
 
