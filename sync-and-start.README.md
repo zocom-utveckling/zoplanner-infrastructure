@@ -8,6 +8,7 @@ Script för att synka alla ZoPlanner-repos och starta om Docker-stacken efter at
 # Skapa en mapp för projektet på skrivbordet
 cd ~/desktop
 mkdir ZoPlanner
+echo "ZoPlanner skapades: $(date '+%H:%M %Y-%m-%d')"
 cd ZoPlanner
 
 git clone https://github.com/zocom-utveckling/zoplanner-api.git
