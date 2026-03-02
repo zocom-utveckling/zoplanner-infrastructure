@@ -30,10 +30,10 @@ for dir in zoplanner-api zoplanner-service zoplanner-frontend zoplanner-notifica
   fi
 done
 
-# Restart stack
+# Restart stack (use -p zoplanner so same volumes are always used, data persists)
 cd zoplanner-api/webapi
-docker-compose down
-docker-compose up -d --build
+docker-compose -p zoplanner down
+docker-compose -p zoplanner up -d --build
 
 echo "Done."
 echo "Frontend: http://localhost:3000"
@@ -75,6 +75,10 @@ cp zoplanner-infrastructure/sync-and-start.sh .
 chmod +x sync-and-start.sh
 ./sync-and-start.sh
 ```
+
+## Databasen behålls
+
+Scriptet använder `-p zoplanner` så att samma Docker-volym alltid används. Din databasdata behålls mellan körningar, även om du kör scriptet från olika mappar.
 
 ## Förutsättningar
 

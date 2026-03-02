@@ -244,7 +244,8 @@ context: ../../zoplanner-notificationservice
 
 ```bash
 # Starta alla 5 containers (från zoplanner-api/webapi mappen)
-docker-compose up -d --build
+# -p zoplanner = samma volym används alltid, databasen behålls mellan körningar
+docker-compose -p zoplanner up -d --build
 ```
 
 ### Steg 5: Verifiera att allt fungerar
@@ -259,13 +260,13 @@ docker-compose up -d --build
 
 | Åtgärd | Kommando |
 |--------|----------|
-| **Starta alla containers** | `docker-compose up -d` |
-| **Starta med rebuild** | `docker-compose up -d --build` |
-| **Stoppa alla containers** | `docker-compose down` |
-| **Stoppa och radera data** | `docker-compose down -v` |
-| **Se status** | `docker-compose ps` |
-| **Se loggar** | `docker-compose logs -f` |
-| **Starta om alla** | `docker-compose restart` |
+| **Starta alla containers** | `docker-compose -p zoplanner up -d` |
+| **Starta med rebuild** | `docker-compose -p zoplanner up -d --build` |
+| **Stoppa alla containers** | `docker-compose -p zoplanner down` |
+| **Stoppa och radera data** | `docker-compose -p zoplanner down -v` |
+| **Se status** | `docker-compose -p zoplanner ps` |
+| **Se loggar** | `docker-compose -p zoplanner logs -f` |
+| **Starta om alla** | `docker-compose -p zoplanner restart` |
 | **Lägg till data manuelt i databasen** | `docker exec -it din-container-namn psql -U postgres -d zoplanner -c "skriv sql kodan här"` |
 | **Lägg till data manuelt från fil** | `docker cp uppdatering.sql din-container-namn:/tmp/` |
 | **Kör filen** | `docker exec -it din-container-namn psql -U postgres -d ditt-db-namn -f /tmp/uppdatering.sql` |
@@ -274,19 +275,19 @@ docker-compose up -d --build
 
 ```bash
 # Endast databasen
-docker-compose up -d zoplanner-database
+docker-compose -p zoplanner up -d zoplanner-database
 
 # Endast Spring Boot API
-docker-compose up -d app
+docker-compose -p zoplanner up -d app
 
 # Endast .NET Service
-docker-compose up -d dotnet-service
+docker-compose -p zoplanner up -d dotnet-service
 
 # Endast Frontend
-docker-compose up -d frontend
+docker-compose -p zoplanner up -d frontend
 
 # Endast Notification service
-docker-compose up -d notification-service
+docker-compose -p zoplanner up -d notification-service
 ```
 
 ---
@@ -298,21 +299,21 @@ docker-compose up -d notification-service
 
 ### "Port already in use"
 - ✅ Stäng andra program som använder portarna (5432, 8080, 5027, 3000)
-- ✅ Eller kör `docker-compose down` om tidigare containers körs
+- ✅ Eller kör `docker-compose -p zoplanner down` om tidigare containers körs
 
 ### "Cannot find .env file"
 - ✅ Skapa `.env` filen enligt instruktionerna i Steg 2
 
 ### "Build failed"
 - ✅ Kontrollera att du har rätt sökvägar i `docker-compose.yml`
-- ✅ Kontrollera loggarna med `docker-compose logs`
+- ✅ Kontrollera loggarna med `docker-compose -p zoplanner logs`
 
 ### Se detaljerade loggar för specifik container
 ```bash
-docker-compose logs -f app          # Spring Boot
-docker-compose logs -f dotnet-service  # .NET
-docker-compose logs -f zoplanner-database  # Databas
-docker-compose logs -f frontend     # Frontend
+docker-compose -p zoplanner logs -f app          # Spring Boot
+docker-compose -p zoplanner logs -f dotnet-service  # .NET
+docker-compose -p zoplanner logs -f zoplanner-database  # Databas
+docker-compose -p zoplanner logs -f frontend     # Frontend
 ```
 
 ## 🆘 Behöver du hjälp?
@@ -320,7 +321,7 @@ docker-compose logs -f frontend     # Frontend
 Om du stöter på problem:
 
 1. 📖 Läs igenom felsökningsavsnittet ovan
-2. 📋 Kontrollera loggarna med `docker-compose logs -f`
+2. 📋 Kontrollera loggarna med `docker-compose -p zoplanner logs -f`
 3. 💬 Kontakta utvecklingsteamet i discord
 
 

@@ -9,10 +9,10 @@ for dir in zoplanner-api zoplanner-service zoplanner-frontend zoplanner-notifica
   fi
 done
 
-# Restart stack
+# Restart stack (use -p zoplanner so same volumes are always used, data persists)
 cd zoplanner-api/webapi
-docker-compose down
-docker-compose up -d --build
+docker-compose -p zoplanner down
+docker-compose -p zoplanner up -d --build
 
 echo "Done."
 echo "Frontend: http://localhost:3000"
