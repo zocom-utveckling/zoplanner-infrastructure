@@ -82,6 +82,7 @@ Set-Location "zoplanner-api\webapi"
 
 docker-compose -p zoplanner down
 docker-compose -p zoplanner up -d --build
+Write-Host "Command Completed Successfully" -ForegroundColor Green
 ```
 
 ### Mac och Linux
