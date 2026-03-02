@@ -26,62 +26,35 @@ notepad .env
 
 ```
 
-### Windows (PowerShell, datum i mappnamn)
-
-```powershell
-Set-Location ~/Desktop
-
-$folder = "ZoPlanner-{0:yyyy-MM-dd_HH-mm}" -f (Get-Date)
-New-Item -ItemType Directory -Path $folder -Force | Out-Null
-Write-Host ("ZoPlanner skapades: {0} {1:HH:mm yyyy-MM-dd}" -f $folder, (Get-Date))
-
-Set-Location $folder
-
-git clone https://github.com/zocom-utveckling/zoplanner-api.git
-git clone https://github.com/zocom-utveckling/zoplanner-service.git
-git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
-git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
-git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
-
-Set-Location .\zoplanner-api\webapi\
-notepad .env
-# Kopiera in info till .env
-```
-
 ## Scriptet för att uppdatera repo och docker
-
-
 
 ### Windows (PowerShell)
 
 ```powershell
-# Stop script on first error (like set -e)
-$ErrorActionPreference = "Stop"
-
-# List of repositories
-$repos = @(
-    "zoplanner-api",
-    "zoplanner-service",
-    "zoplanner-frontend",
-    "zoplanner-notificationservice"
+$urls = @(
+  "https://github.com/zocom-utveckling/zoplanner-api.git",
+  "https://github.com/zocom-utveckling/zoplanner-service.git",
+  "https://github.com/zocom-utveckling/zoplanner-frontend.git",
+  "https://github.com/zocom-utveckling/zoplanner-notificationservice.git",
+  "https://github.com/zocom-utveckling/zoplanner-infrastructure.git"
 )
 
-# Pull all repos
-foreach ($dir in $repos) {
-    if (Test-Path $dir -PathType Container) {
-        Write-Host "Pulling $dir..."
-        
-        Push-Location $dir
-        git pull
-        Pop-Location
-    }
+foreach ($url in $urls) {
+    Write-Host "Cloning $url ..." -ForegroundColor Cyan
+    git clone $url
 }
 
-# Restart stack (use -p zoplanner so same volumes are always used, data persists)
-Set-Location "zoplanner-api\webapi"
-
+cd zoplanner-api/webapi
 docker-compose -p zoplanner down
 docker-compose -p zoplanner up -d --build
+
+Write-Output @"
+Done.
+Frontend: http://localhost:3000
+Swagger - .NET: http://localhost:5027/swagger/index.html
+Swagger - Java API: http://localhost:8080/swagger-ui/index.html
+Swagger - Notification: http://localhost:8082/swagger-ui/index.html
+"@
 Write-Host "Command Completed Successfully" -ForegroundColor Green
 ```
 
