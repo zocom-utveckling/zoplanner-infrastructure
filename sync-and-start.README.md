@@ -4,6 +4,8 @@ Script för att synka alla ZoPlanner-repos och starta om Docker-stacken efter at
 
 ## Ladda ner alla repo första gången
 
+### Mac och Linux (bash, datum i mappnamn)
+
 ```bash
 # Skapa en mapp för projektet på skrivbordet
 cd ~/desktop
@@ -22,6 +24,28 @@ cd ./zoplanner-api/webapi/
 notepad .env
 # Kopiera in info till .env
 
+```
+
+### Windows (PowerShell, datum i mappnamn)
+
+```powershell
+Set-Location ~/Desktop
+
+$folder = "ZoPlanner-{0:yyyy-MM-dd_HH-mm}" -f (Get-Date)
+New-Item -ItemType Directory -Path $folder -Force | Out-Null
+Write-Host ("ZoPlanner skapades: {0} {1:HH:mm yyyy-MM-dd}" -f $folder, (Get-Date))
+
+Set-Location $folder
+
+git clone https://github.com/zocom-utveckling/zoplanner-api.git
+git clone https://github.com/zocom-utveckling/zoplanner-service.git
+git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
+git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
+git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
+
+Set-Location .\zoplanner-api\webapi\
+notepad .env
+# Kopiera in info till .env
 ```
 
 ## Scriptet för att uppdatera repo och docker
