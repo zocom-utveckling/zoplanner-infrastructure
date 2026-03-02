@@ -21,7 +21,7 @@ notepad .env
 
 ```
 
-## Scriptet 
+## Scriptet för att uppdatera repo och docker
 
 ```bash
 #!/bin/bash
