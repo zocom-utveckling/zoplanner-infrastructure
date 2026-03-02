@@ -47,6 +47,7 @@ foreach ($url in $urls) {
 cd zoplanner-api/webapi
 docker-compose -p zoplanner down
 docker-compose -p zoplanner up -d --build
+cd zoplanner-api/webapi
 
 Write-Output @"
 Done.
