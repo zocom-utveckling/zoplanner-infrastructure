@@ -35,8 +35,6 @@ for dir in zoplanner-api zoplanner-service zoplanner-frontend zoplanner-notifica
   fi
 done
 
-
-
 # Restart stack (use -p zoplanner so same volumes are always used, data persists)
 cd zoplanner-api/webapi
 docker-compose -p zoplanner down
