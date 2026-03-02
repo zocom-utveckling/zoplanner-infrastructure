@@ -1,6 +1,5 @@
 # zoplanner-infrastructure
 
-Infrastructure and deployment guides for the ZoPlanner system.
 
 ## Script för git clone 
 
