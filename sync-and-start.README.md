@@ -35,7 +35,11 @@ cd zoplanner-api/webapi
 docker-compose down
 docker-compose up -d --build
 
-echo "Done. Frontend: http://localhost:3000 | .NET: http://localhost:5027 | Java: http://localhost:8080"
+echo "Done."
+echo "Frontend: http://localhost:3000"
+echo "Swagger - .NET: http://localhost:5027/swagger/index.html"
+echo "Swagger - Java API: http://localhost:8080/swagger-ui/index.html"
+echo "Swagger - Notification: http://localhost:8082/swagger-ui/index.html"
 ```
 
 ## Vad gör scriptet?
@@ -43,7 +47,7 @@ echo "Done. Frontend: http://localhost:3000 | .NET: http://localhost:5027 | Java
 1. **Pullar alla 4 repos** – zoplanner-api, zoplanner-service, zoplanner-frontend, zoplanner-notificationservice
 2. **Stoppar containrarna** – `docker-compose down`
 3. **Bygger och startar om** – `docker-compose up -d --build`
-4. **Visar länkar** – Frontend, .NET och Java-URL:er
+4. **Visar länkar** – Frontend och alla Swagger-URL:er (.NET, Java API, Notification)
 
 ## Användning
 
@@ -83,5 +87,9 @@ chmod +x sync-and-start.sh
 När scriptet är klart visas:
 
 ```
-Done. Frontend: http://localhost:3000 | .NET: http://localhost:5027 | Java: http://localhost:8080
+Done.
+Frontend: http://localhost:3000
+Swagger - .NET: http://localhost:5027/swagger/index.html
+Swagger - Java API: http://localhost:8080/swagger-ui/index.html
+Swagger - Notification: http://localhost:8082/swagger-ui/index.html
 ```
