@@ -17,11 +17,26 @@ Write-Host ("ZoPlanner-mapp klar: {0:HH:mm yyyy-MM-dd}" -f (Get-Date))
 
 cd ZoPlanner
 
-git clone https://github.com/zocom-utveckling/zoplanner-api.git
-git clone https://github.com/zocom-utveckling/zoplanner-service.git
-git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
-git clone https://github.com/zocom-utveckling/zoplanner-notificationservice.git
-git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
+$repos = @(
+    "zoplanner-api",
+    "zoplanner-service",
+    "zoplanner-frontend",
+    "zoplanner-notificationservice",
+    "zoplanner-infrastructure"
+)
+
+foreach ($repo in $repos) {
+    if (Test-Path $repo -PathType Container) {
+        Write-Host "Repo $repo finns redan – kör git pull..."
+        Push-Location $repo
+        git pull
+        Pop-Location
+    }
+    else {
+        Write-Host "Klonar $repo..."
+        git clone "https://github.com/zocom-utveckling/$repo.git"
+    }
+}
 ```
 
 2. Kör PowerShell-scriptet som syncar alla repo och startar om Docker-stacken:
