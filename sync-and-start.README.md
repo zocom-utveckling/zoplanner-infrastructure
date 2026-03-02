@@ -17,6 +17,8 @@ git clone https://github.com/zocom-utveckling/zoplanner-service.git
 git clone https://github.com/zocom-utveckling/zoplanner-frontend.git
 git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
 git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
+Write-Host "Repos cloned." -ForegroundColor Green
+
 
 cd ./zoplanner-api/webapi/
 notepad .env
