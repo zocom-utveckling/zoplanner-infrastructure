@@ -2,7 +2,7 @@
 
 Infrastructure and deployment guides for the ZoPlanner system.
 
-## Kom igång snabbt (Windows / PowerShell)
+## Script för git clone 
 
 1. Klona alla repo till en mapp (t.ex. Desktop/ZoPlanner):
 
@@ -27,7 +27,7 @@ Write-Host "Repos cloned." -ForegroundColor Green
 
 ```
 
-2. Kör PowerShell-scriptet som syncar alla repo och startar om Docker-stacken:
+2. Script för att git pull och starta om docker.
 
 ```powershell
 $folders = @(
