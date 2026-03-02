@@ -30,8 +30,42 @@ Write-Host "Repos cloned." -ForegroundColor Green
 2. Kör PowerShell-scriptet som syncar alla repo och startar om Docker-stacken:
 
 ```powershell
-cd ~/Desktop/ZoPlanner
-.\zoplanner-infrastructure\sync-and-start.ps1
+$folders = @(
+  "zoplanner-api",
+  "zoplanner-service",
+  "zoplanner-frontend",
+  "zoplanner-notificationservice",
+  "zoplanner-infrastructure"
+)
+
+foreach ($folder in $folders) {
+    if (Test-Path $folder) {
+        Write-Host "Pulling $folder ..." -ForegroundColor Cyan
+        Push-Location $folder
+        git pull
+        Pop-Location
+    }
+    else {
+        Write-Host "$folder not found!" -ForegroundColor Red
+    }
+}
+
+cd .\zoplanner-api/webapi
+docker compose -p zoplanner down --remove-orphans
+docker-compose -p zoplanner up -d --build
+cd ..\..
+
+Write-Output @"
+Done.
+Frontend: http://localhost:3000
+Swagger - .NET: http://localhost:5027/swagger/index.html
+Swagger - Java API: http://localhost:8080/swagger-ui/index.html
+Swagger - Notification: http://localhost:8082/swagger-ui/index.html
+"@
+Write-Host "Command Completed Successfully" -ForegroundColor Green
+
+#
+
 ```
 
 > Körs från parent-mappen där alla repo ligger (`zoplanner-api`, `zoplanner-service`, osv).
