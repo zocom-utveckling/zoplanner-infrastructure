@@ -31,23 +31,31 @@ notepad .env
 ### Windows (PowerShell)
 
 ```powershell
-$urls = @(
-  "https://github.com/zocom-utveckling/zoplanner-api.git",
-  "https://github.com/zocom-utveckling/zoplanner-service.git",
-  "https://github.com/zocom-utveckling/zoplanner-frontend.git",
-  "https://github.com/zocom-utveckling/zoplanner-notificationservice.git",
-  "https://github.com/zocom-utveckling/zoplanner-infrastructure.git"
+
+$folders = @(
+  "zoplanner-api",
+  "zoplanner-service",
+  "zoplanner-frontend",
+  "zoplanner-notificationservice",
+  "zoplanner-infrastructure"
 )
 
-foreach ($url in $urls) {
-    Write-Host "Cloning $url ..." -ForegroundColor Cyan
-    git clone $url
+foreach ($folder in $folders) {
+    if (Test-Path $folder) {
+        Write-Host "Pulling $folder ..." -ForegroundColor Cyan
+        Push-Location $folder
+        git pull
+        Pop-Location
+    }
+    else {
+        Write-Host "$folder not found!" -ForegroundColor Red
+    }
 }
 
 cd zoplanner-api/webapi
-docker-compose -p zoplanner down
+docker compose -p zoplanner down --remove-orphans
 docker-compose -p zoplanner up -d --build
-cd zoplanner-api/webapi
+cd ..\..
 
 Write-Output @"
 Done.
@@ -57,6 +65,9 @@ Swagger - Java API: http://localhost:8080/swagger-ui/index.html
 Swagger - Notification: http://localhost:8082/swagger-ui/index.html
 "@
 Write-Host "Command Completed Successfully" -ForegroundColor Green
+
+#
+
 ```
 
 ### Mac och Linux
