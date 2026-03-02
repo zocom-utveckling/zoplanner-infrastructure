@@ -21,6 +21,9 @@ git clone https://github.com/zocom-utveckling/zoplanner-notificationservice
 git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
 Write-Host "Repos cloned." -ForegroundColor Green
 cd .\zoplanner-api/webapi
+
+Write-Host "Please add .env file with credentials before proceeding." -ForegroundColor Green
+
 docker-compose -p zoplanner up -d --build
 
 #
