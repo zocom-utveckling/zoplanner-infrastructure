@@ -54,7 +54,7 @@ foreach ($folder in $folders) {
     }
 }
 
-cd .\zoplanner-api/webapi
+cd .\zoplanner-api\webapi
 docker compose -p zoplanner down --remove-orphans
 docker-compose -p zoplanner up -d --build
 cd ..\..
