@@ -22,7 +22,7 @@ git clone https://github.com/zocom-utveckling/zoplanner-infrastructure.git
 Write-Host "Repos cloned." -ForegroundColor Green
 cd .\zoplanner-api/webapi
 
-Write-Host "Please add .env file with credentials before proceeding." -ForegroundColor Green
+Write-Host "Please add .env file with credentials inside .\zoplanner-api\webapi before proceeding." -ForegroundColor Green
 Read-Host "Press enter to continue."
 
 
