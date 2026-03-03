@@ -1,8 +1,9 @@
 # zoplanner-infrastructure
 
-Script för att ladda ner hela repot
+- 📥 **1. Script för att ladda ner hela repot** – Klonar alla projekt i rätt struktur.
+- 🔄 **2. Script för git pull & starta om Docker** – Uppdaterar alla repos och bygger om containrarna.
 
-## Script för git clone 
+## 1. Script för ny git clone
 
 ```powershell
 # Skapa en mapp för projektet på skrivbordet
@@ -31,7 +32,7 @@ docker-compose -p zoplanner up -d --build
 #
 
 ```
-## Script för att git pull och starta om docker
+## 2. Script för uppdatera repon och starta om docker
 
 ```powershell
 
