@@ -34,6 +34,21 @@ docker-compose -p zoplanner up -d --build
 ## Script för att git pull och starta om docker
 
 ```powershell
+
+
+# Stop on first error
+$ErrorActionPreference = "Stop"
+
+# Always determine base folder correctly
+if ((Split-Path -Leaf (Get-Location)) -eq "webapi") {
+    # We are inside zoplanner-api\webapi
+    Set-Location "..\.."
+}
+
+# We are now guaranteed to be in base folder
+
+$basePath = (Get-Location).Path
+
 $folders = @(
   "zoplanner-api",
   "zoplanner-service",
@@ -42,6 +57,7 @@ $folders = @(
   "zoplanner-infrastructure"
 )
 
+# Pull all repos
 foreach ($folder in $folders) {
     if (Test-Path $folder) {
         Write-Host "Pulling $folder ..." -ForegroundColor Cyan
@@ -54,10 +70,14 @@ foreach ($folder in $folders) {
     }
 }
 
-cd .\zoplanner-api\webapi
+# Go to webapi
+Set-Location ".\zoplanner-api\webapi"
+
 docker compose -p zoplanner down --remove-orphans
-docker-compose -p zoplanner up -d --build
-cd ..\..
+docker compose -p zoplanner up -d --build
+
+# Return to base
+Set-Location $basePath
 
 Write-Output @"
 Done.
@@ -66,6 +86,7 @@ Swagger - .NET: http://localhost:5027/swagger/index.html
 Swagger - Java API: http://localhost:8080/swagger-ui/index.html
 Swagger - Notification: http://localhost:8082/swagger-ui/index.html
 "@
+
 Write-Host "Command Completed Successfully" -ForegroundColor Green
 
 #
