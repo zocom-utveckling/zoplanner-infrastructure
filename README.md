@@ -25,7 +25,7 @@ cd .\zoplanner-api/webapi
 Write-Host "Please add .env file with credentials inside .\zoplanner-api\webapi before proceeding." -ForegroundColor Green
 Read-Host "Press enter to continue."
 
-
+docker compose -p zoplanner down --remove-orphans
 docker-compose -p zoplanner up -d --build
 
 #
