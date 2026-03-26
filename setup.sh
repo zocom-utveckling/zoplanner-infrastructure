@@ -25,5 +25,7 @@ else
     exit 1
 fi
 
+cd ./zoplanner-api/webapi
+
 $dockerc -p zoplanner down --remove-orphans
 $dockerc -p zoplanner up -d --build
