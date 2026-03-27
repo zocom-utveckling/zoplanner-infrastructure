@@ -4,6 +4,19 @@ on:
   schedule:
     - cron: "0 20 * * 4"
   workflow_dispatch:
+      inputs:
+        branch-api:
+          description: "Branch zoplanner-api"
+          required: true
+          default: "dev"
+        branch-service:
+          description: "Branch zoplanner-service"
+          required: true
+          default: "dev"
+        branch-notificationservice:
+          description: "Branch zoplanner-notificationservice"
+          required: true
+          default: "dev"
 
 jobs:
   test:
@@ -15,6 +28,7 @@ jobs:
         with:
           workflow: 205960695
           repo: zocom-utveckling/zoplanner-api
+          ref: ${{ github.event.inputs.branch-api || 'dev' }}
           token: '${{secrets.TOKEN}}'
 
       - name: Invoke zoplanner-service workflow
@@ -22,6 +36,7 @@ jobs:
         with:
           workflow: 251174415
           repo: zocom-utveckling/zoplanner-service
+          ref: ${{ github.event.inputs.branch-service || 'dev' }}
           token: '${{secrets.TOKEN}}'
 
       - name: Invoke zoplanner-notificationservice workflow
@@ -29,4 +44,5 @@ jobs:
         with:
           workflow: 209960196
           repo: zocom-utveckling/zoplanner-notificationservice
+          ref: ${{ github.event.inputs.branch-notificationservice || 'dev' }}
           token: '${{secrets.TOKEN}}'
