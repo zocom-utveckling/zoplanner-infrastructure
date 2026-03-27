@@ -1,0 +1,26 @@
+name: Test Torsdag 
+
+on:
+  schedule:
+    - cron: "0 20 * * 4"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Invoke zoplanner-api workflow
+        uses: benc-uk/workflow-dispatch@v1.3.1
+        with:
+          workflow: 205960695
+
+      - name: Invoke zoplanner-service workflow
+        uses: benc-uk/workflow-dispatch@v1.3.1
+        with:
+          workflow: 251174415
+
+      - name: Invoke zoplanner-notificationservice workflow
+        uses: benc-uk/workflow-dispatch@v1.3.1
+        with:
+          workflow: 209960196
