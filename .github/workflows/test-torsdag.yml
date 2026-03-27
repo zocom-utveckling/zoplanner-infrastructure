@@ -15,15 +15,18 @@ jobs:
         with:
           workflow: 205960695
           repo: zocom-utveckling/zoplanner-api
+          token: '${{secrets.TOKEN}}'
 
       - name: Invoke zoplanner-service workflow
         uses: benc-uk/workflow-dispatch@v1.3.1
         with:
           workflow: 251174415
           repo: zocom-utveckling/zoplanner-service
+          token: '${{secrets.TOKEN}}'
 
       - name: Invoke zoplanner-notificationservice workflow
         uses: benc-uk/workflow-dispatch@v1.3.1
         with:
           workflow: 209960196
           repo: zocom-utveckling/zoplanner-notificationservice
+          token: '${{secrets.TOKEN}}'
