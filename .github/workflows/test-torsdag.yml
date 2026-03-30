@@ -1,4 +1,4 @@
-name: Test Torsdag 
+name: Test Torsdag deployment mock
 
 on:
   schedule:
@@ -19,9 +19,9 @@ on:
           default: "dev"
 
 jobs:
-  test:
+  zoplanner-api:
+    name: Test & build ZoPlanner API
     runs-on: ubuntu-latest
-
     steps:
       - name: Invoke zoplanner-api workflow
         uses: benc-uk/workflow-dispatch@v1.3.1
@@ -31,6 +31,11 @@ jobs:
           ref: ${{ github.event.inputs.branch-api || 'dev' }}
           token: '${{secrets.TOKEN}}'
 
+  zoplanner-service:
+    name: Test & build ZoPlanner Service
+    needs: zoplanner-api
+    runs-on: ubuntu-latest
+    steps:
       - name: Invoke zoplanner-service workflow
         uses: benc-uk/workflow-dispatch@v1.3.1
         with:
@@ -38,11 +43,23 @@ jobs:
           repo: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
           token: '${{secrets.TOKEN}}'
-
+  
+  zoplanner-notificationservice:
+    name: Test & build ZoPlanner Service
+    needs: [zoplanner-api, zoplanner-service]
+    runs-on: ubuntu-latest
+    steps:
       - name: Invoke zoplanner-notificationservice workflow
         uses: benc-uk/workflow-dispatch@v1.3.1
         with:
-          workflow: 209960196
-          repo: zocom-utveckling/zoplanner-notificationservice
-          ref: ${{ github.event.inputs.branch-notificationservice || 'dev' }}
+          workflow: 251174415
+          repo: zocom-utveckling/zoplanner-service
+          ref: ${{ github.event.inputs.branch-service || 'dev' }}
           token: '${{secrets.TOKEN}}'
+  deploy:
+    name: Deploy
+    needs: [zoplanner-api, zoplanner-service, zoplanner-notificationservice]
+    runs-on: ubuntu-latest
+    steps:
+      run: echo "All tests passed."
+      - 
