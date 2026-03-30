@@ -4,19 +4,19 @@ on:
   schedule:
     - cron: "0 20 * * 4"
   workflow_dispatch:
-      inputs:
-        branch-api:
-          description: "Branch zoplanner-api"
-          required: true
-          default: "dev"
-        branch-service:
-          description: "Branch zoplanner-service"
-          required: true
-          default: "dev"
-        branch-notificationservice:
-          description: "Branch zoplanner-notificationservice"
-          required: true
-          default: "dev"
+    inputs:
+      branch-api:
+        description: "Branch zoplanner-api"
+        required: true
+        default: "dev"
+      branch-service:
+        description: "Branch zoplanner-service"
+        required: true
+        default: "dev"
+      branch-notificationservice:
+        description: "Branch zoplanner-notificationservice"
+        required: true
+        default: "dev"
 
 jobs:
   zoplanner-api:
@@ -30,7 +30,21 @@ jobs:
           repo: zocom-utveckling/zoplanner-api
           ref: ${{ github.event.inputs.branch-api || 'dev' }}
           wait-for-completion: true
-          token: '${{secrets.TOKEN}}'
+          token: "${{secrets.TOKEN}}"
+
+  zoplanner-notificationservice:
+    name: Test & build ZoPlanner Notificationservice
+    needs: [zoplanner-api, zoplanner-service]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke zoplanner-notificationservice workflow
+        uses: the-actions-org/workflow-dispatch@v4
+        with:
+          workflow: 251174415
+          repo: zocom-utveckling/zoplanner-service
+          ref: ${{ github.event.inputs.branch-service || 'dev' }}
+          wait-for-completion: true
+          token: "${{secrets.TOKEN}}"
 
   zoplanner-service:
     name: Test & build ZoPlanner Service
@@ -44,21 +58,8 @@ jobs:
           repo: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
           wait-for-completion: true
-          token: '${{secrets.TOKEN}}'
-  
-  zoplanner-notificationservice:
-    name: Test & build ZoPlanner Notificationservice
-    needs: [zoplanner-api, zoplanner-service]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Invoke zoplanner-notificationservice workflow
-        uses: the-actions-org/workflow-dispatch@v4
-        with:
-          workflow: 251174415
-          repo: zocom-utveckling/zoplanner-service
-          ref: ${{ github.event.inputs.branch-service || 'dev' }}
-          wait-for-completion: true
-          token: '${{secrets.TOKEN}}'
+          token: "${{secrets.TOKEN}}"
+
   deploy:
     name: Deploy
     needs: [zoplanner-api, zoplanner-service, zoplanner-notificationservice]
