@@ -1,4 +1,4 @@
-name: Test Torsdag deployment mock
+name: Test Torsdag deployment skiss
 
 on:
   schedule:
