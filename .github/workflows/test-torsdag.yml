@@ -24,11 +24,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-api workflow
-        uses: benc-uk/workflow-dispatch@v1.3.1
+        uses: the-actions-org/workflow-dispatch@v4
         with:
           workflow: 205960695
           repo: zocom-utveckling/zoplanner-api
           ref: ${{ github.event.inputs.branch-api || 'dev' }}
+          wait-for-completion: true
           token: '${{secrets.TOKEN}}'
 
   zoplanner-service:
@@ -37,24 +38,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-service workflow
-        uses: benc-uk/workflow-dispatch@v1.3.1
+        uses: the-actions-org/workflow-dispatch@v4
         with:
           workflow: 251174415
           repo: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
+          wait-for-completion: true
           token: '${{secrets.TOKEN}}'
   
   zoplanner-notificationservice:
-    name: Test & build ZoPlanner Service
+    name: Test & build ZoPlanner Notificationservice
     needs: [zoplanner-api, zoplanner-service]
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-notificationservice workflow
-        uses: benc-uk/workflow-dispatch@v1.3.1
+        uses: the-actions-org/workflow-dispatch@v4
         with:
           workflow: 251174415
           repo: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
+          wait-for-completion: true
           token: '${{secrets.TOKEN}}'
   deploy:
     name: Deploy
