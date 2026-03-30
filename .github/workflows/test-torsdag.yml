@@ -34,7 +34,7 @@ jobs:
 
   zoplanner-notificationservice:
     name: Test & build ZoPlanner Notificationservice
-    needs: [zoplanner-api, zoplanner-service]
+    needs: zoplanner-api
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-notificationservice workflow
@@ -48,7 +48,7 @@ jobs:
 
   zoplanner-service:
     name: Test & build ZoPlanner Service
-    needs: zoplanner-api
+    needs: [zoplanner-api, zoplanner-notificationservice]
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-service workflow
