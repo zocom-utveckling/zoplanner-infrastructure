@@ -61,5 +61,4 @@ jobs:
     needs: [zoplanner-api, zoplanner-service, zoplanner-notificationservice]
     runs-on: ubuntu-latest
     steps:
-      run: echo "All tests passed."
-      - 
+      - run: echo "All tests passed"
