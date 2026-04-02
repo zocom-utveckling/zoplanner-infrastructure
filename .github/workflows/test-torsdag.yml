@@ -30,11 +30,11 @@ jobs:
           repo: zocom-utveckling/zoplanner-api
           ref: ${{ github.event.inputs.branch-api || 'dev' }}
           wait-for-completion: true
+          wait-for-completion-interval: 10s
           token: "${{secrets.TOKEN}}"
 
   zoplanner-notificationservice:
     name: Test & build ZoPlanner Notificationservice
-    needs: zoplanner-api
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-notificationservice workflow
@@ -44,11 +44,11 @@ jobs:
           repo: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
           wait-for-completion: true
+          wait-for-completion-interval: 10s
           token: "${{secrets.TOKEN}}"
 
   zoplanner-service:
     name: Test & build ZoPlanner Service
-    needs: [zoplanner-api, zoplanner-notificationservice]
     runs-on: ubuntu-latest
     steps:
       - name: Invoke zoplanner-service workflow
@@ -58,6 +58,7 @@ jobs:
           repo: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
           wait-for-completion: true
+          wait-for-completion-interval: 10s
           token: "${{secrets.TOKEN}}"
 
   deploy:
