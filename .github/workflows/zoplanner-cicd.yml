@@ -1,0 +1,117 @@
+
+name: ZoPlanner CI/CD
+
+on:
+  schedule:
+    - cron: "0 20 * * 4"
+  workflow_dispatch:
+    inputs:
+      branch-api:
+        description: "Branch zoplanner-api"
+        required: true
+        default: "dev"
+      branch-service:
+        description: "Branch zoplanner-service"
+        required: true
+        default: "dev"
+      branch-notificationservice:
+        description: "Branch zoplanner-notificationservice"
+        required: true
+        default: "dev"
+
+jobs:
+  zoplanner-api:
+    name: Test & build ZoPlanner API
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: "${{secrets.POSTGRES_USER}}"
+          POSTGRES_PASSWORD: "${{secrets.POSTGRES_PASSWORD}}"
+          POSTGRES_DB: zoplanner
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      HOST: localhost
+      PORT: 5432
+      POSTGRES_USER: "${{secrets.POSTGRES_USER}}"
+      POSTGRES_PASSWORD: "${{secrets.POSTGRES_PASSWORD}}"
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          repository: zocom-utveckling/zoplanner-api
+          token: "${{secrets.TOKEN}}"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+          
+      - name: Maven build and test
+        run: mvn clean verify
+        working-directory: ./webapi
+
+      
+
+  zoplanner-notificationservice:
+    name: Test & build ZoPlanner Notificationservice
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-notificationservice
+          token: "${{secrets.TOKEN}}"
+
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Maven build and run tests
+        run: mvn -B clean verify
+
+  zoplanner-service:
+    name: Test & build ZoPlanner Service
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-service
+          token: "${{secrets.TOKEN}}"
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore zoplanner-service.sln
+
+      - name: Build
+        run: dotnet build zoplanner-service.sln --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test zoplanner-service.sln --no-build --configuration Release --verbosity normal
+        
+  deploy:
+    name: Deploy
+    needs: [zoplanner-api, zoplanner-service, zoplanner-notificationservice]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "All tests passed"
