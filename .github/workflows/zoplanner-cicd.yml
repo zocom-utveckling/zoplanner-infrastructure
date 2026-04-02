@@ -1,4 +1,3 @@
-
 name: ZoPlanner CI/CD
 
 on:
@@ -21,7 +20,7 @@ on:
 
 jobs:
   zoplanner-api:
-    name: Test & build ZoPlanner API
+    name: Build & test ZoPlanner API
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -46,11 +45,11 @@ jobs:
       
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
         with:
           repository: zocom-utveckling/zoplanner-api
           ref: ${{ github.event.inputs.branch-api || 'dev' }}
-          path: api
+          path: zoplanner-api
           token: "${{secrets.TOKEN}}"
 
       - name: Set up JDK 21
@@ -62,12 +61,12 @@ jobs:
           
       - name: Maven build and test
         run: mvn clean verify
-        working-directory: ./api/webapi
+        working-directory: ./zoplanner-api/webapi
 
       
 
   zoplanner-notificationservice:
-    name: Test & build ZoPlanner Notificationservice
+    name: Build & test ZoPlanner Notificationservice
     runs-on: ubuntu-latest
 
     steps:
@@ -76,7 +75,7 @@ jobs:
         with:
           repository: zocom-utveckling/zoplanner-notificationservice
           ref: ${{ github.event.inputs.branch-notificationservice || 'dev' }}
-          path: notificationservice
+          path: zoplanner-notificationservice
           token: "${{secrets.TOKEN}}"
 
 
@@ -88,14 +87,14 @@ jobs:
 
       - name: Maven build and run tests
         run: mvn -B clean verify
-        working-directory: ./notificationservice
+        working-directory: ./zoplanner-notificationservice
 
   zoplanner-service:
-    name: Test & build ZoPlanner Service
+    name: Build & test ZoPlanner Service
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./service
+        working-directory: ./zoplanner-service
     
     steps:
       - name: Checkout code
@@ -103,7 +102,7 @@ jobs:
         with:
           repository: zocom-utveckling/zoplanner-service
           ref: ${{ github.event.inputs.branch-service || 'dev' }}
-          path: service
+          path: zoplanner-service
           token: "${{secrets.TOKEN}}"
 
       - name: Set up .NET
@@ -119,10 +118,58 @@ jobs:
 
       - name: Run tests
         run: dotnet test zoplanner-service.sln --no-build --configuration Release --verbosity normal
+
+  zoplanner-frontend:
+    name: Build & test Vite React
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-frontend
+          ref: dev
+          token: ${{secrets.TOKEN}}
+          path: zoplanner-frontend
+      - run: echo "There are no tests right now :("
         
   deploy:
     name: Deploy
-    needs: [zoplanner-api, zoplanner-service, zoplanner-notificationservice]
-    runs-on: ubuntu-latest
+    needs: [zoplanner-api, zoplanner-service, zoplanner-notificationservice, zoplanner-frontend]
+    runs-on: zocom-ubuntu
     steps:
-      - run: echo "All tests passed"
+
+      - name: Checkout zoplanner-api
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-api
+          ref: dev
+          path: zoplanner-api
+          token: ${{secrets.TOKEN}}
+          
+      - name: Checkout zoplanner-service
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-service
+          ref: dev
+          path: zoplanner-service
+          token: ${{secrets.TOKEN}}
+
+      - name: Checkout zoplanner-notificationservice
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-notificationservice
+          ref: dev
+          path: zoplanner-notificationservice
+          token: ${{secrets.TOKEN}}
+
+      - name: Checkout zoplanner-frontend
+        uses: actions/checkout@v4
+        with:
+          repository: zocom-utveckling/zoplanner-frontend
+          ref: dev
+          path: zoplanner-frontend
+          token: ${{secrets.TOKEN}}
+
+    # Postgres backup and restore?
+    # Starta ZoPlanner med docker
