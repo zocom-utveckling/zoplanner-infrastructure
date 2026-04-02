@@ -1,8 +1,6 @@
 name: Test Torsdag deployment skiss
 
 on:
-  schedule:
-    - cron: "0 20 * * 4"
   workflow_dispatch:
     inputs:
       branch-api:
