@@ -49,6 +49,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: zocom-utveckling/zoplanner-api
+          ref: ${{ github.event.inputs.branch-api || 'dev' }}
+          path: api
           token: "${{secrets.TOKEN}}"
 
       - name: Set up JDK 21
@@ -60,7 +62,7 @@ jobs:
           
       - name: Maven build and test
         run: mvn clean verify
-        working-directory: ./webapi
+        working-directory: ./api/webapi
 
       
 
@@ -73,6 +75,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: zocom-utveckling/zoplanner-notificationservice
+          ref: ${{ github.event.inputs.branch-notificationservice || 'dev' }}
+          path: notificationservice
           token: "${{secrets.TOKEN}}"
 
 
@@ -84,15 +88,22 @@ jobs:
 
       - name: Maven build and run tests
         run: mvn -B clean verify
+        working-directory: ./notificationservice
 
   zoplanner-service:
     name: Test & build ZoPlanner Service
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./service
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           repository: zocom-utveckling/zoplanner-service
+          ref: ${{ github.event.inputs.branch-service || 'dev' }}
+          path: service
           token: "${{secrets.TOKEN}}"
 
       - name: Set up .NET
