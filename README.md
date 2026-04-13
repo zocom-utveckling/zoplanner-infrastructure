@@ -69,6 +69,16 @@ foreach ($folder in $folders) {
     }
 }
 
+#Backup database y/n
+$backupDatabase = Read-Host "Would you like to backup the database before Docker rebuild? (y/n)"
+
+if($backupDatabase -eq "y") {
+    docker exec -i zoplanner-database pg_dump -U postgres zoplanner > zoplanner_backup.sql
+    Write-Host "saved postgresql backup 'zoplanner_backup.sql' in $basePath"
+}
+
+
+
 # Go to webapi
 Set-Location ".\zoplanner-api\webapi"
 
@@ -77,6 +87,17 @@ docker compose -p zoplanner up -d --build
 
 # Return to base
 Set-Location $basePath
+
+Start-Sleep -Seconds 5
+
+#Restore database y/n
+if($backupDatabase -eq "y") {
+    $restoreDatabase = Read-Host "Would you like to restore the database now? (y/n)"
+    if($restoreDatabase -eq "y") {
+        Get-Content "zoplanner_backup.sql" -Raw | docker exec -i zoplanner-database psql -X zoplanner -U postgres
+    }
+}
+
 
 Write-Output @"
 Done.
@@ -87,8 +108,6 @@ Swagger - Notification: http://localhost:8082/swagger-ui/index.html
 "@
 
 Write-Host "Command Completed Successfully" -ForegroundColor Green
-
-#
 ```
 
 > Körs från parent-mappen där alla repo ligger (`zoplanner-api`, `zoplanner-service`, osv).
