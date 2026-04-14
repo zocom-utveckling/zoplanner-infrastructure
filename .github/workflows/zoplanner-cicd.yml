@@ -98,7 +98,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore zoplanner-service.sln
+        run: dotnet restore
 
       - name: Build
         run: dotnet build zoplanner-service.sln --no-restore --configuration Release
