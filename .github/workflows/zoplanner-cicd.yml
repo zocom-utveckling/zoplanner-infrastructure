@@ -98,7 +98,7 @@ jobs:
         run: ls -R
         
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore zoplanner-service.sln
         working-directory: zoplanner-service
 
 
