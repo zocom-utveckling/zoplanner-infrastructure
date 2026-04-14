@@ -97,6 +97,10 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Debug
+        run: ls
+        working-directory: ./zoplanner-service
+
       - name: Restore dependencies
         run: dotnet restore
         working-directory: ./zoplanner-service
