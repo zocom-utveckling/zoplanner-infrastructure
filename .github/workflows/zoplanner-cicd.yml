@@ -97,6 +97,12 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Debug paths
+        run: |
+          pwd
+          ls -la
+          ls -la zoplanner-service
+
       - name: Restore dependencies
         run: dotnet restore
 
