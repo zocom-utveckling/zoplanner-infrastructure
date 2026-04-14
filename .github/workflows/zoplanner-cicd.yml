@@ -79,9 +79,6 @@ jobs:
   zoplanner-service:
     name: Build & test ZoPlanner Service
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./zoplanner-service
     
     steps:
       - name: Checkout code
@@ -97,23 +94,19 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Debug
-        run: ls
-        working-directory: ./zoplanner-service
-
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: ./zoplanner-service
+        working-directory: zoplanner-service
 
 
       - name: Build
         run: dotnet build zoplanner-service.sln --no-restore --configuration Release
-        working-directory: ./zoplanner-service
+        working-directory: zoplanner-service
 
 
       - name: Run tests
         run: dotnet test zoplanner-service.sln --no-build --configuration Release --verbosity normal
-        working-directory: ./zoplanner-service
+        working-directory: zoplanner-service
 
 
   zoplanner-frontend:
